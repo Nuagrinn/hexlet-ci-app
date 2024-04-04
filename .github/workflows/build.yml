@@ -3,13 +3,19 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      VAL: ${{ vars.VAL }}
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-    steps:
-      - name: Print environment secret
-        run: echo ${{ env.SNYK_TOKEN }}
-      - name: Print environment variable
-        run: echo ${{ env.VAL}}
 
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: make setup
+      - run: make test
+      - run: make lint
+      - run: echo
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 

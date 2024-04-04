@@ -4,9 +4,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      VAL: ${{ vars.VAL }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
-      - name: Print environment secret [1]
+      - name: Print environment secret
         run: echo ${{ env.SNYK_TOKEN }}
+      - name: Print environment variable
+        run: echo ${{ env.VAL}}
 
 
